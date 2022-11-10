@@ -20,6 +20,7 @@ Arguments:
 Options:
   -n, --hosts <HOSTS>      Specifies the number of hosts.
   -s, --subnets <SUBNETS>  Specify a config file.
+  -c, --csv                Output in csv format.
   -h, --help               Print help information (use `--help` for more detail)
   -V, --version            Print version information
 
