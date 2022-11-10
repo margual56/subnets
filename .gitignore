@@ -1,1 +1,6 @@
 /target
+
+# For testing configs
+*.json
+
+/bin
