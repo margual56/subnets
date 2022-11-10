@@ -75,6 +75,33 @@ impl IP {
         u32::pow(2, 32 - self.mask.to_mask_repr()) - 2
     }
 
+    pub fn summary_csv(&self) -> String {
+        let mut f = String::new();
+
+        writeln!(
+            &mut f,
+            "IP,IP_bin,Mask,Mask_long,Mask_bin,Hosts,Range_low,Range_high"
+        )
+        .unwrap();
+
+        let range = self.get_range();
+        writeln!(
+            &mut f,
+            "{},{:?},{},{},{:?},{},{},{}",
+            self.ip,
+            self.ip,
+            self.mask.to_mask_repr(),
+            self.mask,
+            self.mask,
+            self.get_hosts(),
+            range.0,
+            range.1
+        )
+        .unwrap();
+
+        return f;
+    }
+
     pub fn summary(&self) -> String {
         let mut f = String::new();
 
