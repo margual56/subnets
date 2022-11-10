@@ -9,7 +9,7 @@ This is a single executable, so you can head to [the releases page](https://gith
 Otherwise, if you have rust installed, you can run `cargo install --git "https://github.com/margual56/subnets"`.
 
 ## Run example
-
+_(Here the colors are missing)_
 ```
 $ subnets -h
 Usage: subnets [OPTIONS] <IP>
