@@ -1,6 +1,9 @@
 use super::address::Address;
+use colored::*;
 use std::fmt;
+use std::fmt::Write;
 
+#[derive(Clone, Copy)]
 pub struct IP {
     pub ip: Address,
     pub mask: Address,
@@ -28,22 +31,27 @@ impl fmt::Display for IP {
 }
 impl fmt::Debug for IP {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}/{:?}", self.ip, self.mask)
+        write!(
+            f,
+            "{}/{}",
+            format!("{:?}", self.ip).bold(),
+            format!("{:?}", self.mask.to_mask_repr()).red()
+        )
     }
 }
 
 impl IP {
-    pub fn from_str(txt: &str) -> Result<Self, IPErr> {
+    pub fn from_str(txt: &str) -> Self {
         let spl = txt.split("/").collect::<Vec<&str>>();
 
         if spl.len() < 2 {
-            return Err(IPErr::InvalidFormat);
+            panic!("The IP did not contain a mask");
         }
 
-        Ok(IP {
+        IP {
             ip: Address::from_str(spl[0]).unwrap(),
             mask: Address::from_mask_repr(spl[1].parse::<u8>().unwrap()),
-        })
+        }
     }
 
     pub fn from_hosts(txt: &str, hosts: u32) -> Self {
@@ -65,5 +73,42 @@ impl IP {
 
     pub fn get_hosts(&self) -> u32 {
         u32::pow(2, 32 - self.mask.to_mask_repr()) - 2
+    }
+
+    pub fn summary(&self) -> String {
+        let mut f = String::new();
+
+        writeln!(
+            &mut f,
+            "IP: {}/{}",
+            format!("{}", self.ip).cyan(),
+            format!("{}", self.mask.to_mask_repr()).red()
+        )
+        .unwrap();
+
+        writeln!(
+            f,
+            "The mask is {} and can hold {} PCs (or {} PCs and {} gateway)",
+            format!("{}", self.mask).red(),
+            format!("{}", self.get_hosts()).green(),
+            format!("{}", self.get_hosts() - 1).yellow(),
+            "1".yellow()
+        )
+        .unwrap();
+
+        let range = self.get_range();
+
+        writeln!(
+            f,
+            "With this mask, the subnet IP range is from {} to {}",
+            format!("{}", range.0).bold().cyan(),
+            format!("{}", range.1).bold().yellow()
+        )
+        .unwrap();
+
+        writeln!(f, "IP in binary:   {}", format!("{:?}", self.ip).bold()).unwrap();
+        writeln!(f, "Mask in binary: {}", format!("{:?}", self.mask).bold()).unwrap();
+
+        return f;
     }
 }

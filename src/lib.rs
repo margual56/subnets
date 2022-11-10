@@ -9,47 +9,34 @@ mod tests {
 
     #[test]
     fn test_ip() {
-        match IP::from_str(IP_MASK_STR) {
-            Err(e) => println!("{:}", e),
-            Ok(i) => {
-                println!("\t{}", i);
-                assert_eq!(format!("{}", i), "192.168.0.0/20");
-            }
-        };
+        let i = IP::from_str(IP_MASK_STR);
+        println!("\t{}", i);
+        assert_eq!(format!("{}", i), "192.168.0.0/20");
     }
 
     #[test]
     fn test_bin() {
-        //read!("{}\n");
-        match IP::from_str(IP_MASK_STR) {
-            Err(e) => println!("{:}", e),
-            Ok(i) => {
-                println!("\t{:?}", i);
-                assert_eq!(
-                    format!("{:?}", i),
-                    "11000000.10101000.00000000.00000000/11111111.11111111.11110000.00000000"
-                );
-            }
-        };
+        let i = IP::from_str(IP_MASK_STR);
+        println!("\t{:?}", i);
+        assert_eq!(
+            format!("{:?}/{:?}", i.ip, i.mask),
+            "11000000.10101000.00000000.00000000/11111111.11111111.11110000.00000000"
+        );
     }
 
     #[test]
     fn test_range() {
-        match IP::from_str(IP_MASK_STR) {
-            Err(e) => println!("{:}", e),
-            Ok(i) => {
-                let range = i.get_range();
+        let i = IP::from_str(IP_MASK_STR);
+        let range = i.get_range();
 
-                println!(
-                    "\tWith mask /{}: {} -> {}",
-                    i.mask.to_mask_repr(),
-                    range.0,
-                    range.1
-                );
-                assert_eq!(range.0.address, 3232235520);
-                assert_eq!(range.1.address, 3232239615);
-            }
-        };
+        println!(
+            "\tWith mask /{}: {} -> {}",
+            i.mask.to_mask_repr(),
+            range.0,
+            range.1
+        );
+        assert_eq!(range.0.address, 3232235520);
+        assert_eq!(range.1.address, 3232239615);
     }
 
     #[test]
