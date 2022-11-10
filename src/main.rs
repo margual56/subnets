@@ -77,7 +77,7 @@ fn main() {
 
             builder.set_columns(vec![
                 "Name",
-                "Requested number of hosts",
+                "Requested # of hosts",
                 "Mask",
                 "Max. # of hosts",
                 "Range",
