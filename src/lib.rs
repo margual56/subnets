@@ -19,7 +19,7 @@ mod tests {
         let i = IP::from_str(IP_MASK_STR);
         println!("\t{:?}", i);
         assert_eq!(
-            format!("{:?}", i),
+            format!("{:?}/{:?}", i.ip, i.mask),
             "11000000.10101000.00000000.00000000/11111111.11111111.11110000.00000000"
         );
     }
