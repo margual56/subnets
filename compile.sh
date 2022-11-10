@@ -2,6 +2,7 @@
 
 CARGO_DIR=$HOME/.cargo/bin
 targets=(x86_64-unknown-linux-gnu x86_64-unknown-linux-musl x86_64-pc-windows-gnu aarch64-linux-android)
+rm -rf ./bin
 mkdir ./bin
 
 for target in "${targets[@]}"

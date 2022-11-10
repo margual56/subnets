@@ -1,6 +1,6 @@
 use clap::Parser;
 use std::{collections::HashMap, fs::File, io::Read, path::PathBuf};
-use subnets::{ip::IP, address::Address};
+use subnets::{address::Address, ip::IP};
 use tabled::{builder::Builder, object::Rows, Alignment, ModifyObject, Style};
 
 #[derive(Parser, Debug)]
@@ -19,7 +19,7 @@ pub struct Cli {
     hosts: Option<u32>,
 
     /// Option: -s --subnets: Specify a config file with multiple subnets.
-    #[clap(long, short, conflicts_with="hosts", help = "Specify a config file.")]
+    #[clap(long, short, conflicts_with = "hosts", help = "Specify a config file.")]
     subnets: Option<PathBuf>,
 }
 
@@ -66,11 +66,7 @@ fn main() {
                 builder.add_record(vec![
                     v.0,
                     format!("{} PCs (+1 gateway)", v.1),
-                    format!(
-                        "(/{:<2}) {:<16}",
-                        tmp_ip.mask.to_mask_repr(),
-                        tmp_ip.mask
-                    ),
+                    format!("(/{:<2}) {:<16}", tmp_ip.mask.to_mask_repr(), tmp_ip.mask),
                     format!("{}", tmp_ip.get_hosts()),
                     format!("{:<14} - {}", format!("{}", range.0), range.1),
                 ]);
@@ -78,7 +74,13 @@ fn main() {
                 ip = Some(range.1.clone());
             });
 
-            builder.set_columns(vec!["Name", "Requested number of hosts", "Mask", "Max. # of hosts", "Range"]);
+            builder.set_columns(vec![
+                "Name",
+                "Requested number of hosts",
+                "Mask",
+                "Max. # of hosts",
+                "Range",
+            ]);
 
             println!(
                 "{}",
