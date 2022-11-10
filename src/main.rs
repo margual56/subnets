@@ -1,4 +1,5 @@
 use clap::Parser;
+use colored::Colorize;
 use std::{collections::HashMap, fs::File, io::Read, path::PathBuf};
 use subnets::{address::Address, ip::IP};
 use tabled::{builder::Builder, object::Rows, Alignment, ModifyObject, Style};
@@ -65,10 +66,10 @@ fn main() {
 
                 builder.add_record(vec![
                     v.0,
-                    format!("{} PCs (+1 gateway)", v.1),
+                    format!("{} PCs", v.1),
                     format!("(/{:<2}) {:<16}", tmp_ip.mask.to_mask_repr(), tmp_ip.mask),
                     format!("{}", tmp_ip.get_hosts()),
-                    format!("{:<14} - {}", format!("{}", range.0), range.1),
+                    format!("{:<15} - {}", format!("{}", range.0), range.1),
                 ]);
 
                 ip = Some(range.1.clone());
@@ -83,12 +84,13 @@ fn main() {
             ]);
 
             println!(
-                "{}",
+                "{}\r\n\t{}",
                 builder
                     .build()
                     .with(Style::rounded())
                     .with(Rows::new(1..).modify().with(Alignment::left()))
-                    .to_string()
+                    .to_string(),
+                "Note: Rember to reserve 1 address for the gateway!".italic().red().dimmed()
             );
         }
     };
