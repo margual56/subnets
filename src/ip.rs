@@ -3,6 +3,7 @@ use colored::*;
 use std::fmt;
 use std::fmt::Write;
 
+#[derive(Clone, Copy)]
 pub struct IP {
     pub ip: Address,
     pub mask: Address,
