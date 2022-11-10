@@ -49,24 +49,21 @@ impl IP {
     pub fn from_hosts(txt: &str, hosts: u32) -> Self {
         let ip = Address::from_str(txt).unwrap();
 
-        let repr = 32-(hosts as f32 + 2f32).log2().ceil() as u8;
+        let repr = 32 - (hosts as f32 + 2f32).log2().ceil() as u8;
 
         let mask: Address = Address::from_mask_repr(repr);
 
-        IP {
-            ip, 
-            mask,
-        }
+        IP { ip, mask }
     }
 
     pub fn get_range(&self) -> (Address, Address) {
         let min_ip = self.ip & self.mask;
-        let max_ip = min_ip + (u32::pow(2, 32 - self.mask.to_mask_repr()) -1);
+        let max_ip = min_ip + (u32::pow(2, 32 - self.mask.to_mask_repr()) - 1);
 
         (min_ip, max_ip)
     }
 
     pub fn get_hosts(&self) -> u32 {
-        u32::pow(2, 32-self.mask.to_mask_repr())-2
+        u32::pow(2, 32 - self.mask.to_mask_repr()) - 2
     }
 }
